@@ -1,10 +1,10 @@
-package net.ambientia.azurehello;
+package net.haaja.jsondumper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AzurehelloApplicationTests {
+class JsonDumperApplicationApplicationTests {
 
 	@Test
 	void contextLoads() {
