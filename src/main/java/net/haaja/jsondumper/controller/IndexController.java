@@ -1,6 +1,8 @@
 package net.haaja.jsondumper.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import net.haaja.jsondumper.domain.JsonPayload;
 import net.haaja.jsondumper.repository.JsonPayloadRepository;
 import org.slf4j.Logger;
@@ -18,11 +20,17 @@ import org.springframework.http.HttpStatus;
 @RequestMapping("/")
 public class IndexController {
 
+  /* TODO: Log the paths messages have been received at */
+
+  IndexController(MeterRegistry registry) {
+    Counter counter = registry.counter("received_payloads");
+  }
+
   @Autowired
   private JsonPayloadRepository repository;
   private Logger logger = LoggerFactory.getLogger(IndexController.class);
 
-  @PostMapping(value = "/", produces = "application/json", consumes = "application/json")
+  @PostMapping(value = "/**", produces = "application/json", consumes = "application/json")
   public ResponseEntity<?> receiveJsonPayload(@RequestBody JsonNode requestBody) {
 
     JsonPayload payload = new JsonPayload();
@@ -35,7 +43,7 @@ public class IndexController {
         HttpStatus.OK);
   }
 
-  @GetMapping("/")
+  @GetMapping("/**")
   public Iterable<JsonPayload> getAllReceived() {
     return repository.findAll();
   }
